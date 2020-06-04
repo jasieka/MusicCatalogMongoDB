@@ -8,13 +8,14 @@ import java.util.List;
 
 public interface ArtistRepository extends MongoRepository<Artist, String> {
 
-    public List<Artist> findByFirstName(String firstName);
-    public List<Artist> findByLastName(String lastName);
+    List<Artist> findByName(String name);
 
+    Artist findFirstByName(String name);
+    /*
     @Query("{lastName:'?0'}")
-    List<Artist> findCustomByLastName(String lastName);
+    List<Artist> findCustomByLastName(String lastName);*/
 
-    @Query("{lastName : { $regex: ?0 } }")
-    List<Artist> findCustomByRegExLastName(String lastName);
+    @Query("{name : { $regex: ?0 } }")
+    List<Artist> findCustomByRegExName(String name);
 
 }
