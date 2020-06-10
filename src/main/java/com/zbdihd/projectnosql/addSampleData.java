@@ -1,16 +1,12 @@
 package com.zbdihd.projectnosql;
 
 
-import com.zbdihd.projectnosql.model.Album;
-import com.zbdihd.projectnosql.model.Artist;
-import com.zbdihd.projectnosql.model.Genre;
-import com.zbdihd.projectnosql.model.MusicLabel;
-import com.zbdihd.projectnosql.repository.AlbumRepository;
-import com.zbdihd.projectnosql.repository.ArtistRepository;
-import com.zbdihd.projectnosql.repository.GenreRepository;
-import com.zbdihd.projectnosql.repository.MusicLabelRepository;
+import com.zbdihd.projectnosql.model.*;
+import com.zbdihd.projectnosql.repository.*;
+import com.zbdihd.projectnosql.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +27,9 @@ public class addSampleData implements CommandLineRunner {
     @Autowired
     private MusicLabelRepository musicLabelRepository;
 
+    @Autowired
+    private UserService userService;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -44,6 +43,15 @@ public class addSampleData implements CommandLineRunner {
         addMusicLabels();
         addArtists(); //Artist/Band
         addAlbums();
+        addUsers();
+    }
+
+    public void addUsers(){
+        userService.addRole("ADMIN");
+        userService.addRole("USER");
+
+        userService.addUser("user", "user", "USER");
+        userService.addUser("admin", "admin", "ADMIN");
     }
 
 
@@ -386,6 +394,10 @@ public class addSampleData implements CommandLineRunner {
         System.out.println("--------------------------------");
         albumRepository.findAll().forEach(System.out::println);
         System.out.println("--------------------------------");
+        userService.getAllUsers().forEach(System.out::println);
+        System.out.println("--------------------------------");
+        userService.getAllRoles().forEach(System.out::println);
+        System.out.println("--------------------------------");
     }
 
 
@@ -403,6 +415,7 @@ public class addSampleData implements CommandLineRunner {
         artistRepository.deleteAll();
         genreRepository.deleteAll();
         musicLabelRepository.deleteAll();
+        userService.deleteAllUsersAndRoles();
     }
 
 

@@ -8,7 +8,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import java.util.Collections;
 
 @Route("login")
 @PageTitle("Login | Music Catalog")
