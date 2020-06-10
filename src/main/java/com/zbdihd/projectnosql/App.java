@@ -67,36 +67,39 @@ public class App implements CommandLineRunner{
 
 		//Music Label
 		musicLabelRepository.save(new MusicLabel("E-music", getDate(2, Calendar.FEBRUARY, 2014),
-				"Poland", "Jacek Kowalczyk"));
+				"Poland", "Jacek Kowalczyk", new Date()));
 		musicLabelRepository.save(new MusicLabel("Ultra Records", getDate(28, Calendar.MAY, 2007),
-				"USA", "Patrick Moxey"));
+				"USA", "Patrick Moxey", new Date()));
 		musicLabelRepository.save(new MusicLabel("Warner Music Group", getDate(15, Calendar.JULY, 1958),
-				"USA", "Dannii Minogue"));
+				"USA", "Dannii Minogue", new Date()));
 		musicLabelRepository.save(new MusicLabel("K Records", getDate(25, Calendar.FEBRUARY, 1975),
-				"Canada", "Calvin Johnson"));
+				"Canada", "Calvin Johnson", new Date()));
 		musicLabelRepository.save(new MusicLabel("Chronological Classics", getDate(10, Calendar.DECEMBER, 1989),
-				"France", "Gilles Pétard"));
+				"France", "Gilles Pétard", new Date()));
 		musicLabelRepository.save(new MusicLabel("Sony Music", getDate(6, Calendar.MAY, 1990),
-				"USA", "Ton Bryan"));
+				"USA", "Ton Bryan", new Date()));
 
 		//Artist/Band
 		artistRepository.save(new Artist("Michael Jackson", "USA",
-				getDate(29, Calendar.AUGUST, 1958), getDate(25, Calendar.JUNE, 2009)));
+				getDate(29, Calendar.AUGUST, 1958), getDate(25, Calendar.JUNE, 2009), new Date()));
 		artistRepository.save(new Artist("Hans Zimmer", "Germany",
-				getDate(12, Calendar.SEPTEMBER, 1957), ""));
+				getDate(12, Calendar.SEPTEMBER, 1957), "", new Date()));
 		artistRepository.save(new Artist("Amy Winehouse", "USA",
-				getDate(14, Calendar.SEPTEMBER, 1983), getDate(23, Calendar.JULY, 2011)));
+				getDate(14, Calendar.SEPTEMBER, 1983), getDate(23, Calendar.JULY, 2011), new Date()));
 		artistRepository.save(new Artist("Michał Lorenc", "Poland",
-				getDate(5, Calendar.OCTOBER, 1955), ""));
+				getDate(5, Calendar.OCTOBER, 1955), "", new Date()));
 		artistRepository.save(new Artist("Frank Sinatra", "USA",
-				getDate(12, Calendar.DECEMBER, 1915), getDate(14, Calendar.MAY, 1998)));
+				getDate(12, Calendar.DECEMBER, 1915), getDate(14, Calendar.MAY, 1998), new Date()));
 		artistRepository.save(new Artist("Bryan Adams", "Canada",
-				getDate(12, Calendar.NOVEMBER, 1959), ""));
+				getDate(12, Calendar.NOVEMBER, 1959), "", new Date()));
 		artistRepository.save(new Artist("Sylwia Grzeszczak", "Poland",
-				getDate(7, Calendar.APRIL, 1989), ""));
+				getDate(7, Calendar.APRIL, 1989), "", new Date()));
 
 		//Album
+
+		//
 		//Hans Zimmer - Interstellar
+		//
 		List<String> tracks = Arrays.asList("Dreaming Of The Crash",
 											"Cornfield Chase",
 											"Dust",
@@ -122,7 +125,8 @@ public class App implements CommandLineRunner{
 										1,
 										"Interstellar pairs the creative forces of Hans Zimmer and esteemed director Christopher Nolan, who collaborated previously on The Dark Knight film trilogy and Inception. Chris wanted us to push the limits, offers Zimmer. Every conversation was about pushing boundaries and exploring new territories. This movie virtually dictates that you put everything on the line and keep the laboratory doors wide open and experiment to the very end. It tested our limits: the limits of what musicians are capable of, the limits of what could be recorded, the limits of everyone's stamina, commitment and invention, and I think we got it.\n" +
 												"\n" +
-												"I believe that Hans score for Interstellar has the tightest bond between music and image that we've yet achieved, Nolan reflected. And we're excited for people to be able to revisit the soundtrack once they ve had the chance to experience the music in the film itself."
+												"I believe that Hans score for Interstellar has the tightest bond between music and image that we've yet achieved, Nolan reflected. And we're excited for people to be able to revisit the soundtrack once they ve had the chance to experience the music in the film itself.",
+										new Date()
 										));
 		//Add album to genre
 		Genre genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
@@ -131,8 +135,10 @@ public class App implements CommandLineRunner{
 		genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
 		genreRepository.save(genreSoundtracks);
 
-
+		//
 		//Hans Zimmer - Live In Prague
+		//
+
 		tracks = Arrays.asList("Medley: Driving (Driving Miss Daisy) / Discombobulate (Sherlock Holmes) / Zoosters Breakout (Madagascar)",
 								"Medley: Crimson Tide / 160 BPM (Angels And Demons)",
 								"Gladiator Medley: The Wheat / The Battle / Elysium / Now We Are Free 4. Chevaliers De Sangreal (The Da Vinci Code)",
@@ -157,8 +163,8 @@ public class App implements CommandLineRunner{
 				musicLabelRepository.findFirstByName("Ultra Records").getId(),
 				2016,
 				2,
-				"Hans Zimmer is one of the most successful film music composers working today. His multi-award winning career reaches back to the mid-80s and he has developed close working relationships with renowned directors such as Ridley Scott, Michael Bay, Ron Howard and Christopher Nolan. This concert was filmed on May 7th, 2016 in Prague during his hugely successful European concert tour. Hans was accompanied by a band, orchestra and choir, 72 musicians in total, including Johnny Marr of The Smiths."
-				));
+				"Hans Zimmer is one of the most successful film music composers working today. His multi-award winning career reaches back to the mid-80s and he has developed close working relationships with renowned directors such as Ridley Scott, Michael Bay, Ron Howard and Christopher Nolan. This concert was filmed on May 7th, 2016 in Prague during his hugely successful European concert tour. Hans was accompanied by a band, orchestra and choir, 72 musicians in total, including Johnny Marr of The Smiths.",
+				new Date()));
 
 		//Add album to genre
 		genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
@@ -168,6 +174,9 @@ public class App implements CommandLineRunner{
 		genreRepository.save(genreSoundtracks);
 
 
+
+
+		//Display
 		System.out.println("Adding sample data");
 		System.out.println("--------------------------------");
 		genreRepository.findAll().forEach(System.out::println);

@@ -5,6 +5,7 @@ import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,6 @@ public class Album {
     @NonNull public int releaseYear;
     @NonNull public int numberOfCDs;
     @NonNull public String description;
+
+    @NonNull public Date lastModifiedAt; //or created
 }

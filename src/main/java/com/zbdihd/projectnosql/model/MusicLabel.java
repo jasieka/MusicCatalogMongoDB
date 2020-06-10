@@ -5,6 +5,8 @@ import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 
 @Data
 @Document(collection = "MusicLabel")
@@ -16,4 +18,6 @@ public class MusicLabel {
     @NonNull public String dateOfCreation; //format dd/MM/yyyy
     @NonNull public String countryOfResidence;
     @NonNull public String chairmanOfTheBoard; //prezes zarządu
+
+    @NonNull public Date lastModifiedAt; //or created
 }
