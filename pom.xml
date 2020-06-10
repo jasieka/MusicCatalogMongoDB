@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.zbdihd</groupId>
 	<artifactId>projectnosql</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.1-alpha</version>
 	<name>projectnosql</name>
 	<description>The theme of the application is a music catalog with the possibility of evaluation.</description>
 
