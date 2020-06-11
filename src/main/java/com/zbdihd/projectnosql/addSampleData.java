@@ -50,8 +50,8 @@ public class addSampleData implements CommandLineRunner {
         userService.addRole("ADMIN");
         userService.addRole("USER");
 
-        userService.addUser("user", "user", "USER");
-        userService.addUser("admin", "admin", "ADMIN");
+        userService.addUser("user", "user", "user");
+        userService.addUser("admin", "admin", "admin");
     }
 
 

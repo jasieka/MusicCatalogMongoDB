@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void addRole(String role){
-        roleRepository.save(new Role(role));
+        roleRepository.save(new Role(role.toUpperCase()));
     }
 
     public void addUser(String username, String password, String role){
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setEnabled(true);
 
-        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findByRole(role))));
+        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findByRole(role.toUpperCase()))));
         userRepository.save(user);
     }
 
