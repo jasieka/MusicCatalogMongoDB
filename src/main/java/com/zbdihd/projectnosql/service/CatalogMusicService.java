@@ -9,4 +9,5 @@ public interface CatalogMusicService {
     List<Genre> getAllGenres();
     void saveGenres(Genre genre);
     Genre findGenreByName(String genreName);
+    void deleteGenreByName(String genreName);
 }

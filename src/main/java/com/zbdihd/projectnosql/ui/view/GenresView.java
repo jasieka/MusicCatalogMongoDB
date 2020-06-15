@@ -40,6 +40,7 @@ public class GenresView extends Div implements AfterNavigationObserver {
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
     private Button cancel = new Button("Cancel");
+    private Button delete = new Button("Delete", VaadinIcon.TRASH.create());
 
     private Binder<Genre> binder;
 
@@ -83,7 +84,17 @@ public class GenresView extends Div implements AfterNavigationObserver {
 
         // the grid valueChangeEvent will clear the form too
         cancel.addClickListener(e -> grid.asSingleSelect().clear());
-        
+
+        delete.addClickListener(e -> {
+            Genre genre = catalogMusicService.findGenreByName(name.getValue());
+            if(genre != null) {
+                catalogMusicService.deleteGenreByName(genre.getName());
+                Notification.show("Genre Deleted");
+            }
+            
+            refreshGrid();
+        });
+
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
 
@@ -111,7 +122,8 @@ public class GenresView extends Div implements AfterNavigationObserver {
         buttonLayout.setSpacing(true);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        buttonLayout.add(save, cancel);
+        delete.getElement().getThemeList().add("error");
+        buttonLayout.add(save, cancel, delete);
         editorDiv.add(buttonLayout);
     }
 

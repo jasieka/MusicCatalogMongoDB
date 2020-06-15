@@ -25,4 +25,8 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
         return genreRepository.findFirstByName(genreName);
     }
 
+    public void deleteGenreByName(String genreName){
+        genreRepository.deleteByName(genreName);
+    }
+
 }
