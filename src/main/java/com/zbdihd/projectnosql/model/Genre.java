@@ -11,8 +11,14 @@ import java.util.List;
 @Document(collection = "Genre")
 public class Genre {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name;
-    @NonNull public List<String> albumIDs;
+    @NonNull private String name;
+    @NonNull private List<String> albumIDs;
+
+    public int numberOfAlbums() {
+        return albumIDs.size();
+    }
+
+
 }

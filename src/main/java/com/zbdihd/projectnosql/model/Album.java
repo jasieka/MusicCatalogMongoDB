@@ -13,20 +13,20 @@ import java.util.Map;
 @Document(collection = "Album")
 public class Album {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name;
-    @NonNull public String artistId;
-    @NonNull public List<String> tracks;
+    @NonNull private String name;
+    @NonNull private String artistId;
+    @NonNull private List<String> tracks;
 
-    @NonNull public Map<String, String> ratings; // "userName;rating"
-    @NonNull public int averageRating; //calculated after each operation on ratings
+    @NonNull private Map<String, String> ratings; // "userName;rating"
+    @NonNull private int averageRating; //calculated after each operation on ratings
 
-    @NonNull public String imageURL;
-    @NonNull public String musicLabelId;
-    @NonNull public int releaseYear;
-    @NonNull public int numberOfCDs;
-    @NonNull public String description;
+    @NonNull private String imageURL;
+    @NonNull private String musicLabelId;
+    @NonNull private int releaseYear;
+    @NonNull private int numberOfCDs;
+    @NonNull private String description;
 
-    @NonNull public Date lastModifiedAt; //or created
+    @NonNull private Date lastModifiedAt; //or created
 }

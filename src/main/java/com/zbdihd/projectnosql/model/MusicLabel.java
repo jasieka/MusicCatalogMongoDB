@@ -12,12 +12,12 @@ import java.util.Date;
 @Document(collection = "MusicLabel")
 public class MusicLabel {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name;
-    @NonNull public String dateOfCreation; //format dd/MM/yyyy
-    @NonNull public String countryOfResidence;
-    @NonNull public String chairmanOfTheBoard; //prezes zarządu
+    @NonNull private String name;
+    @NonNull private String dateOfCreation; //format dd/MM/yyyy
+    @NonNull private String countryOfResidence;
+    @NonNull private String chairmanOfTheBoard; //prezes zarządu
 
-    @NonNull public Date lastModifiedAt; //or created
+    @NonNull private Date lastModifiedAt; //or created
 }

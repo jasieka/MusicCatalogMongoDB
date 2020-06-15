@@ -12,12 +12,12 @@ import java.util.Date;
 @Document(collection = "Artist")
 public class Artist {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name; //Name and Surname or band name
-    @NonNull public String country;
-    @NonNull public String birthDate; //format dd/MM/yyyy
-    @NonNull public String dateOfDeath; //format dd/MM/yyyy
+    @NonNull private String name; //Name and Surname or band name
+    @NonNull private String country;
+    @NonNull private String birthDate; //format dd/MM/yyyy
+    @NonNull private String dateOfDeath; //format dd/MM/yyyy
 
-    @NonNull public Date lastModifiedAt; //or created
+    @NonNull private Date lastModifiedAt; //or created
 }

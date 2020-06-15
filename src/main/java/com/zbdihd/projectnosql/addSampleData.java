@@ -136,7 +136,7 @@ public class addSampleData implements CommandLineRunner {
         ));
         //Add album to genre
         Genre genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        List<String> genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
+        List<String> genreSoundtracksListOfAlbumIDs = genreSoundtracks.getAlbumIDs();
         genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Interstellar").getId());
         genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
         genreRepository.save(genreSoundtracks);
@@ -174,7 +174,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
+        genreSoundtracksListOfAlbumIDs = genreSoundtracks.getAlbumIDs();
         genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Live In Prague").getId());
         genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
         genreRepository.save(genreSoundtracks);
@@ -222,7 +222,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
+        genreSoundtracksListOfAlbumIDs = genreSoundtracks.getAlbumIDs();
         genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Psy & Osaczony").getId());
         genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
         genreRepository.save(genreSoundtracks);
@@ -263,7 +263,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         Genre genrePop = genreRepository.findFirstByName("Pop");
-        List<String> genrePopListOfAlbumIDs = genrePop.albumIDs;
+        List<String> genrePopListOfAlbumIDs = genrePop.getAlbumIDs();
         genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Komponujac Siebie").getId());
         genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
         genreRepository.save(genrePop);
@@ -299,7 +299,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genrePop = genreRepository.findFirstByName("Pop");
-        genrePopListOfAlbumIDs = genrePop.albumIDs;
+        genrePopListOfAlbumIDs = genrePop.getAlbumIDs();
         genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Bad").getId());
         genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
         genreRepository.save(genrePop);
@@ -332,7 +332,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genrePop = genreRepository.findFirstByName("Pop");
-        genrePopListOfAlbumIDs = genrePop.albumIDs;
+        genrePopListOfAlbumIDs = genrePop.getAlbumIDs();
         genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Thriller").getId());
         genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
         genreRepository.save(genrePop);
@@ -380,7 +380,7 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         Genre genreJazz = genreRepository.findFirstByName("Jazz");
-        List<String> genreJazzListOfAlbumIDs = genreJazz.albumIDs;
+        List<String> genreJazzListOfAlbumIDs = genreJazz.getAlbumIDs();
         genreJazzListOfAlbumIDs.add(albumRepository.findFirstByName("Best Of The Best").getId());
         genreJazz.setAlbumIDs(genreJazzListOfAlbumIDs);
         genreRepository.save(genreJazz);
