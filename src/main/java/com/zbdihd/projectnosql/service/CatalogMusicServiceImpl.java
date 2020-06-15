@@ -29,4 +29,8 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
         genreRepository.deleteByName(genreName);
     }
 
+    public List<Genre> findByGenreNameStartsWithIgnoreCase(String genreName){
+        return genreRepository.findByNameStartsWithIgnoreCase(genreName);
+    }
+
 }

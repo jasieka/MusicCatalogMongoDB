@@ -10,4 +10,5 @@ public interface CatalogMusicService {
     void saveGenres(Genre genre);
     Genre findGenreByName(String genreName);
     void deleteGenreByName(String genreName);
+    List<Genre> findByGenreNameStartsWithIgnoreCase(String genreName);
 }

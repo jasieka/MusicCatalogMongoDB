@@ -11,14 +11,17 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import com.zbdihd.projectnosql.model.Genre;
 import com.zbdihd.projectnosql.service.CatalogMusicService;
 import com.zbdihd.projectnosql.ui.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 
@@ -31,10 +34,9 @@ public class GenresView extends Div implements AfterNavigationObserver {
     private CatalogMusicService catalogMusicService;
 
     private Grid<Genre> grid;
-    
+
     //The name of the TextField variable must be the same as the variable corresponding to the field in the Genre class
     private TextField name = new TextField();
-
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
     private Button cancel = new Button("Cancel");
@@ -42,15 +44,22 @@ public class GenresView extends Div implements AfterNavigationObserver {
 
     private Binder<Genre> binder;
 
+    //Text field to enter the username based on which the gird will be filtered
+    private TextField filter = new TextField();
+
     public GenresView() {
         setId("genres-view");
 
         // Configure Grid
-        grid = new Grid<>();
+        grid = new Grid<>(Genre.class);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
-        grid.addColumn(Genre::getName).setHeader("Genre");
+
+        grid.setColumns("id", "name");
+        grid.getColumnByKey("name").setHeader("Genre");
         grid.addColumn(Genre::numberOfAlbums).setHeader("Number of Albums");
+
+        grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 
 
         //when a row is selected or deselected, populate form
@@ -61,7 +70,6 @@ public class GenresView extends Div implements AfterNavigationObserver {
 
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
-        // note that password field isn't bound since that property doesn't exist in
 
         save.addClickListener(e -> {
             Genre genre = grid.asSingleSelect().getValue();
@@ -93,13 +101,34 @@ public class GenresView extends Div implements AfterNavigationObserver {
             refreshGrid();
         });
 
+        //filter
+        HorizontalLayout actions = new HorizontalLayout(filter);
+        actions.setPadding(true);
+        filter.setPlaceholder("Filter by genre name");
+        filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(e -> listGenres(e.getValue()));
+
+
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
 
         createGridLayout(splitLayout);
         createEditorLayout(splitLayout);
 
-        add(splitLayout);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+        verticalLayout.add(splitLayout);
+        verticalLayout.setPadding(true);
+
+        add(actions, verticalLayout);
+    }
+
+    private void createGridLayout(SplitLayout splitLayout) {
+        Div wrapper = new Div();
+        wrapper.setId("wrapper");
+        wrapper.setWidthFull();
+        splitLayout.addToPrimary(wrapper);
+        wrapper.add(grid);
     }
 
     private void createEditorLayout(SplitLayout splitLayout) {
@@ -125,14 +154,6 @@ public class GenresView extends Div implements AfterNavigationObserver {
         editorDiv.add(buttonLayout);
     }
 
-    private void createGridLayout(SplitLayout splitLayout) {
-        Div wrapper = new Div();
-        wrapper.setId("wrapper");
-        wrapper.setWidthFull();
-        splitLayout.addToPrimary(wrapper);
-        wrapper.add(grid);
-    }
-
     private void addFormItem(Div wrapper, FormLayout formLayout,
                              AbstractField field, String fieldName) {
         formLayout.addFormItem(field, fieldName);
@@ -144,7 +165,6 @@ public class GenresView extends Div implements AfterNavigationObserver {
     public void afterNavigation(AfterNavigationEvent event) {
 
         // Lazy init of the grid items, happens only when we are sure the view will be
-        // shown to the user
         refreshGrid();
     }
 
@@ -155,6 +175,14 @@ public class GenresView extends Div implements AfterNavigationObserver {
     private void populateForm(Genre value) {
         // Value can be null as well, that clears the form
         binder.readBean(value);
+    }
+
+    void listGenres(String filterText) {
+        if (StringUtils.isEmpty(filterText)) {
+            refreshGrid();
+        } else {
+            grid.setItems(catalogMusicService.findByGenreNameStartsWithIgnoreCase(filterText));
+        }
     }
 
 }
