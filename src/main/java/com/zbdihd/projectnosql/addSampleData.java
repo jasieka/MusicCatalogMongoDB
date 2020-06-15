@@ -6,7 +6,6 @@ import com.zbdihd.projectnosql.repository.*;
 import com.zbdihd.projectnosql.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +51,11 @@ public class addSampleData implements CommandLineRunner {
 
         userService.addUser("user", "user", "user");
         userService.addUser("admin", "admin", "admin");
+
+        //userService.addRoleToUser("user", "admin");
+
+        //userService.changeStatusEnabled(userService.getUser("admin"));
+
     }
 
 

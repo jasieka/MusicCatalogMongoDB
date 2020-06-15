@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,4 +23,10 @@ public class User {
     private boolean enabled;
     @DBRef
     private Set<Role> roles;
+
+    public String setRolesToString() {
+        List<String> list = new ArrayList<String>();
+        roles.forEach(e -> list.add(e.getRole()));
+        return list.toString();
+    }
 }

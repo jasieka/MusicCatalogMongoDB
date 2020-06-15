@@ -32,4 +32,5 @@ public final class SecurityUtils {
                 && !(authentication instanceof AnonymousAuthenticationToken)
                 && authentication.isAuthenticated();
     }
+
 }
