@@ -31,11 +31,9 @@ public class GenresView extends Div implements AfterNavigationObserver {
     private CatalogMusicService catalogMusicService;
 
     private Grid<Genre> grid;
-
-
+    
     //The name of the TextField variable must be the same as the variable corresponding to the field in the Genre class
     private TextField name = new TextField();
-    private TextField numberOfAlbums = new TextField();
 
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
@@ -91,7 +89,7 @@ public class GenresView extends Div implements AfterNavigationObserver {
                 catalogMusicService.deleteGenreByName(genre.getName());
                 Notification.show("Genre Deleted");
             }
-            
+
             refreshGrid();
         });
 
