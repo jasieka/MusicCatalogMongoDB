@@ -15,6 +15,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
+import com.zbdihd.projectnosql.ui.view.ArtistsView;
 import com.zbdihd.projectnosql.ui.view.GenresView;
 import com.zbdihd.projectnosql.ui.view.MusicLabelsView;
 import com.zbdihd.projectnosql.ui.view.users.UsersView;
@@ -40,6 +41,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         addMenuTab("Users", UsersView.class);
         addMenuTab("Genres", GenresView.class);
         addMenuTab("Music Labels", MusicLabelsView.class);
+        addMenuTab("Artists", ArtistsView.class);
         addMenuTab("Hello World", HelloGui.class);
 
         SecurityContext context = SecurityContextHolder.getContext();

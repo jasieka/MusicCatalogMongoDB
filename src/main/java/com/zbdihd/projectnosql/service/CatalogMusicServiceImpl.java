@@ -1,8 +1,10 @@
 package com.zbdihd.projectnosql.service;
 
 
+import com.zbdihd.projectnosql.model.Artist;
 import com.zbdihd.projectnosql.model.Genre;
 import com.zbdihd.projectnosql.model.MusicLabel;
+import com.zbdihd.projectnosql.repository.ArtistRepository;
 import com.zbdihd.projectnosql.repository.GenreRepository;
 import com.zbdihd.projectnosql.repository.MusicLabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,29 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
     }
 
 
+    @Autowired
+    private ArtistRepository artistRepository;
+
+    public List<Artist> getAllArtists(){
+        return artistRepository.findAll();
+    }
+    public void saveArtist(Artist artist){
+        artistRepository.save(artist);
+    }
+
+    public Artist findArtistByName(String artistName) {
+        return artistRepository.findFirstByName(artistName);
+    }
+
+    public void deleteArtistByName(String artistName){
+        artistRepository.deleteByName(artistName);
+    }
+
+    public List<Artist> findByArtistNameStartsWithIgnoreCase(String artistName){
+        return artistRepository.findByNameStartsWithIgnoreCase(artistName);
+    }
+
+
 
     public List<String> getAllCountries()
     {
@@ -83,13 +108,19 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
     }
 
     public LocalDate stringToDate(String dateWithoutTime) { //"dd/MM/yyyy"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dateWithoutTime, formatter);
-        return date;
+        if(dateWithoutTime.equals(""))
+            return null;
+        else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return LocalDate.parse(dateWithoutTime, formatter);
+        }
     }
 
     public String dateToString(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if(date == null)
+            return "";
+        else
+            return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
 

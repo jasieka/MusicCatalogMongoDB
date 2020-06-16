@@ -11,6 +11,8 @@ public interface ArtistRepository extends MongoRepository<Artist, String> {
     List<Artist> findByName(String name);
 
     Artist findFirstByName(String name);
+    void deleteByName(String name);
+    List<Artist> findByNameStartsWithIgnoreCase(String name);
     /*
     @Query("{lastName:'?0'}")
     List<Artist> findCustomByLastName(String lastName);*/

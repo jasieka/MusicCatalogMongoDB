@@ -22,65 +22,75 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.zbdihd.projectnosql.model.MusicLabel;
+import com.zbdihd.projectnosql.model.Artist;
 import com.zbdihd.projectnosql.service.CatalogMusicService;
 import com.zbdihd.projectnosql.ui.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
-@Route(value = "music-labels", layout = MainView.class)
-@PageTitle("Music Labels View")
-@CssImport("./styles/views/musicLabels/music-labels-view.css")
-public class MusicLabelsView extends Div implements AfterNavigationObserver {
+
+@Route(value = "artists", layout = MainView.class)
+@PageTitle("Artists View")
+@CssImport("./styles/views/artists/artists-view.css")
+public class ArtistsView extends Div implements AfterNavigationObserver {
 
     @Autowired
     private CatalogMusicService catalogMusicService;
 
-    private Grid<MusicLabel> grid;
+    private Grid<Artist> grid;
 
     //The name of the TextField variable must be the same as the variable corresponding to the field in the Genre class
     private TextField name = new TextField();
 
-    
-    private ComboBox<String> countryOfResidence = new ComboBox<>();
-    private TextField chairmanOfTheBoard = new TextField();
-    private DatePicker datePickerDateOfCreation = new DatePicker();
+
+    private ComboBox<String> country = new ComboBox<>();
+
+    private DatePicker datePickerBirthDate = new DatePicker();
+    private DatePicker datePickerDateOfDeath = new DatePicker();
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
     private Button cancel = new Button("Cancel");
     private Button delete = new Button("Delete", VaadinIcon.TRASH.create());
 
-    private Binder<MusicLabel> binder;
+    private Binder<Artist> binder;
 
     //Text field to enter the username based on which the gird will be filtered
     private TextField filter = new TextField();
 
-    public MusicLabelsView() {
+    public ArtistsView() {
         setId("music-labels-view");
 
         // Configure Grid
-        grid = new Grid<>(MusicLabel.class);
+        grid = new Grid<>(Artist.class);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
 
-        grid.setColumns("id", "name","countryOfResidence", "chairmanOfTheBoard", "dateOfCreation");
-        grid.getColumnByKey("name").setHeader("Music Label");
+        grid.setColumns("id", "name","country", "birthDate", "dateOfDeath");
+        grid.getColumnByKey("name").setHeader("Artist");
+
+
+
+       // grid.getColumnByKey("chairmanOfTheBoard").setHeader("Chairman Of The Board");
+       // grid.getColumnByKey("dateOfCreation").setHeader("Date Of Creation");
 
         grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
-        datePickerDateOfCreation.setLocale(Locale.UK);
-        datePickerDateOfCreation.setMax(LocalDate.now());
+        datePickerBirthDate.setLocale(Locale.UK);
+        datePickerDateOfDeath.setLocale(Locale.UK);
+
+
+        datePickerBirthDate.setMax(LocalDate.now());
+        datePickerDateOfDeath.setMax(LocalDate.now());
 
 
         //when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
 
         // Configure Form
-        binder = new Binder<>(MusicLabel.class);
+        binder = new Binder<>(Artist.class);
 
 
         // Bind fields. This where you'd define e.g. validation rules
@@ -89,26 +99,30 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
 
 
         save.addClickListener(e -> {
-            MusicLabel musicLabel = grid.asSingleSelect().getValue();
 
-            if(musicLabel == null){ //create new
-                catalogMusicService.saveMusicLabel(new MusicLabel(name.getValue(),
-                                                    catalogMusicService.dateToString(datePickerDateOfCreation.getValue()),
-                                                    countryOfResidence.getValue(),
-                                                    chairmanOfTheBoard.getValue(),
-                                                    new Date()));
-                Notification.show("Music Label Added");
-            }
-            else {
-                musicLabel.setName(name.getValue());
-                musicLabel.setDateOfCreation(catalogMusicService.dateToString(datePickerDateOfCreation.getValue()));
-                musicLabel.setCountryOfResidence(countryOfResidence.getValue());
-                musicLabel.setChairmanOfTheBoard(chairmanOfTheBoard.getValue());
-                musicLabel.setLastModifiedAt(new Date());
-                catalogMusicService.saveMusicLabel(musicLabel);
-                Notification.show("Music Label Edited");
-            }
 
+            if(validateDates(datePickerBirthDate.getValue(), datePickerDateOfDeath.getValue())) {
+
+                Artist artist = grid.asSingleSelect().getValue();
+                if (artist == null) { //create new
+                    catalogMusicService.saveArtist(new Artist(name.getValue(),
+                            country.getValue(),
+                            catalogMusicService.dateToString(datePickerBirthDate.getValue()),
+                            catalogMusicService.dateToString(datePickerDateOfDeath.getValue()),
+                            new Date()));
+                    Notification.show("Artist Added");
+                } else {
+                    artist.setName(name.getValue());
+                    artist.setCountry(country.getValue());
+                    artist.setBirthDate(catalogMusicService.dateToString(datePickerBirthDate.getValue()));
+                    artist.setDateOfDeath(catalogMusicService.dateToString(datePickerDateOfDeath.getValue()));
+                    artist.setLastModifiedAt(new Date());
+                    catalogMusicService.saveArtist(artist);
+                    Notification.show("Artist Edited");
+                }
+            }
+            else
+                Notification.show("Date of birth cannot be after the date of death");
             refreshGrid();
 
         });
@@ -117,10 +131,10 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
         cancel.addClickListener(e -> grid.asSingleSelect().clear());
 
         delete.addClickListener(e -> {
-            MusicLabel musicLabel = catalogMusicService.findMusicLabelByName(name.getValue());
-            if(musicLabel != null) {
-                catalogMusicService.deleteMusicLabelByName(musicLabel.getName());
-                Notification.show("Music Label Deleted");
+            Artist artist = catalogMusicService.findArtistByName(name.getValue());
+            if(artist != null) {
+                catalogMusicService.deleteArtistByName(artist.getName());
+                Notification.show("Artist Deleted");
             }
 
             refreshGrid();
@@ -129,9 +143,9 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
         //filter
         HorizontalLayout actions = new HorizontalLayout(filter);
         actions.setPadding(true);
-        filter.setPlaceholder("Filter by music label");
+        filter.setPlaceholder("Filter by artist");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> listMusicLabels(e.getValue()));
+        filter.addValueChangeListener(e -> listArtist(e.getValue()));
 
 
         SplitLayout splitLayout = new SplitLayout();
@@ -161,10 +175,10 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
         editorDiv.setId("editor-layout");
         FormLayout formLayout = new FormLayout();
 
-        addFormItem(editorDiv, formLayout, name, "Music Label name");
-        addFormItem(editorDiv, formLayout, countryOfResidence, "Country Of Residence");
-        addFormItem(editorDiv, formLayout, chairmanOfTheBoard, "Chairman Of The Board");
-        addFormItem(editorDiv, formLayout, datePickerDateOfCreation, "Date Of Creation");
+        addFormItem(editorDiv, formLayout, name, "Artist name");
+        addFormItem(editorDiv, formLayout, country, "Country");
+        addFormItem(editorDiv, formLayout, datePickerBirthDate, "Birth Date");
+        addFormItem(editorDiv, formLayout, datePickerDateOfDeath, "Date Of Death");
 
 
         createButtonLayout(editorDiv);
@@ -198,17 +212,22 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
     }
 
     public void refreshGrid(){
-        grid.setItems(catalogMusicService.getAllMusicLabels());
+        grid.setItems(catalogMusicService.getAllArtists());
     }
 
-    private void populateForm(MusicLabel value) {
+    private void populateForm(Artist value) {
         // Value can be null as well, that clears the form
-        countryOfResidence.setItems(catalogMusicService.getAllCountries());
-        datePickerDateOfCreation.clear();
+        country.setItems(catalogMusicService.getAllCountries());
+
+        datePickerBirthDate.clear();
+        datePickerDateOfDeath.clear();
+
+
         binder.readBean(value);
 
         try {
-            datePickerDateOfCreation.setValue(catalogMusicService.stringToDate(value.getDateOfCreation()));
+            datePickerBirthDate.setValue(catalogMusicService.stringToDate(value.getBirthDate()));
+            datePickerDateOfDeath.setValue(catalogMusicService.stringToDate(value.getDateOfDeath()));
         }
         catch (NullPointerException ex){
             //ex.printStackTrace();
@@ -216,13 +235,19 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
 
     }
 
+    private boolean validateDates(LocalDate date1, LocalDate date2)
+    {
+        if(date1 == null || date2 == null)
+            return true;
+        else return date2.isAfter(date1);
+    }
 
 
-    void listMusicLabels(String filterText) {
+    void listArtist(String filterText) {
         if (StringUtils.isEmpty(filterText)) {
             refreshGrid();
         } else {
-            grid.setItems(catalogMusicService.findByMusicLabelNameStartsWithIgnoreCase(filterText));
+            grid.setItems(catalogMusicService.findByArtistNameStartsWithIgnoreCase(filterText));
         }
     }
 

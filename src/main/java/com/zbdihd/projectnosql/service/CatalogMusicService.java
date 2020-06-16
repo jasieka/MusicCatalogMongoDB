@@ -1,5 +1,6 @@
 package com.zbdihd.projectnosql.service;
 
+import com.zbdihd.projectnosql.model.Artist;
 import com.zbdihd.projectnosql.model.Genre;
 import com.zbdihd.projectnosql.model.MusicLabel;
 
@@ -19,6 +20,13 @@ public interface CatalogMusicService {
     MusicLabel findMusicLabelByName(String musicLabelName);
     void deleteMusicLabelByName(String musicLabelName);
     List<MusicLabel> findByMusicLabelNameStartsWithIgnoreCase(String musicLabelName);
+
+    List<Artist> getAllArtists();
+    void saveArtist(Artist artist);
+    Artist findArtistByName(String artistName);
+    void deleteArtistByName(String artistName);
+    List<Artist> findByArtistNameStartsWithIgnoreCase(String artistName);
+
 
     List<String> getAllCountries();
 

@@ -87,15 +87,15 @@ public class addSampleData implements CommandLineRunner {
     }
 
     public void addArtists(){
-        artistRepository.save(new Artist("Michael Jackson", "USA",
+        artistRepository.save(new Artist("Michael Jackson", "United States",
                 catalogMusicService.getStringDateWithoutTime(29, Calendar.AUGUST, 1958), catalogMusicService.getStringDateWithoutTime(25, Calendar.JUNE, 2009), new Date()));
         artistRepository.save(new Artist("Hans Zimmer", "Germany",
                 catalogMusicService.getStringDateWithoutTime(12, Calendar.SEPTEMBER, 1957), "", new Date()));
-        artistRepository.save(new Artist("Amy Winehouse", "USA",
+        artistRepository.save(new Artist("Amy Winehouse", "United States",
                 catalogMusicService.getStringDateWithoutTime(14, Calendar.SEPTEMBER, 1983), catalogMusicService.getStringDateWithoutTime(23, Calendar.JULY, 2011), new Date()));
         artistRepository.save(new Artist("Michał Lorenc", "Poland",
                 catalogMusicService.getStringDateWithoutTime(5, Calendar.OCTOBER, 1955), "", new Date()));
-        artistRepository.save(new Artist("Frank Sinatra", "USA",
+        artistRepository.save(new Artist("Frank Sinatra", "United States",
                 catalogMusicService.getStringDateWithoutTime(12, Calendar.DECEMBER, 1915), catalogMusicService.getStringDateWithoutTime(14, Calendar.MAY, 1998), new Date()));
         artistRepository.save(new Artist("Bryan Adams", "Canada",
                 catalogMusicService.getStringDateWithoutTime(12, Calendar.NOVEMBER, 1959), "", new Date()));
