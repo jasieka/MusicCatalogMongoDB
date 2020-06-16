@@ -3,12 +3,12 @@ package com.zbdihd.projectnosql;
 
 import com.zbdihd.projectnosql.model.*;
 import com.zbdihd.projectnosql.repository.*;
+import com.zbdihd.projectnosql.service.CatalogMusicService;
 import com.zbdihd.projectnosql.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -28,6 +28,9 @@ public class addSampleData implements CommandLineRunner {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CatalogMusicService catalogMusicService;
 
 
     @Override
@@ -69,35 +72,35 @@ public class addSampleData implements CommandLineRunner {
     }
 
     public void addMusicLabels(){
-        musicLabelRepository.save(new MusicLabel("E-music", getDate(2, Calendar.FEBRUARY, 2014),
+        musicLabelRepository.save(new MusicLabel("E-music", catalogMusicService.getStringDateWithoutTime(2, Calendar.FEBRUARY, 2014),
                 "Poland", "Jacek Kowalczyk", new Date()));
-        musicLabelRepository.save(new MusicLabel("Ultra Records", getDate(28, Calendar.MAY, 2007),
-                "USA", "Patrick Moxey", new Date()));
-        musicLabelRepository.save(new MusicLabel("Warner Music Group", getDate(15, Calendar.JULY, 1958),
-                "USA", "Dannii Minogue", new Date()));
-        musicLabelRepository.save(new MusicLabel("K Records", getDate(25, Calendar.FEBRUARY, 1975),
+        musicLabelRepository.save(new MusicLabel("Ultra Records", catalogMusicService.getStringDateWithoutTime(28, Calendar.MAY, 2007),
+                "United States", "Patrick Moxey", new Date()));
+        musicLabelRepository.save(new MusicLabel("Warner Music Group", catalogMusicService.getStringDateWithoutTime(15, Calendar.JULY, 1958),
+                "United States", "Dannii Minogue", new Date()));
+        musicLabelRepository.save(new MusicLabel("K Records", catalogMusicService.getStringDateWithoutTime(25, Calendar.FEBRUARY, 1975),
                 "Canada", "Calvin Johnson", new Date()));
-        musicLabelRepository.save(new MusicLabel("Chronological Classics", getDate(10, Calendar.DECEMBER, 1989),
+        musicLabelRepository.save(new MusicLabel("Chronological Classics", catalogMusicService.getStringDateWithoutTime(10, Calendar.DECEMBER, 1989),
                 "France", "Gilles Pétard", new Date()));
-        musicLabelRepository.save(new MusicLabel("Sony Music", getDate(6, Calendar.MAY, 1990),
-                "USA", "Ton Bryan", new Date()));
+        musicLabelRepository.save(new MusicLabel("Sony Music", catalogMusicService.getStringDateWithoutTime(6, Calendar.MAY, 1990),
+                "United States", "Ton Bryan", new Date()));
     }
 
     public void addArtists(){
         artistRepository.save(new Artist("Michael Jackson", "USA",
-                getDate(29, Calendar.AUGUST, 1958), getDate(25, Calendar.JUNE, 2009), new Date()));
+                catalogMusicService.getStringDateWithoutTime(29, Calendar.AUGUST, 1958), catalogMusicService.getStringDateWithoutTime(25, Calendar.JUNE, 2009), new Date()));
         artistRepository.save(new Artist("Hans Zimmer", "Germany",
-                getDate(12, Calendar.SEPTEMBER, 1957), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.SEPTEMBER, 1957), "", new Date()));
         artistRepository.save(new Artist("Amy Winehouse", "USA",
-                getDate(14, Calendar.SEPTEMBER, 1983), getDate(23, Calendar.JULY, 2011), new Date()));
+                catalogMusicService.getStringDateWithoutTime(14, Calendar.SEPTEMBER, 1983), catalogMusicService.getStringDateWithoutTime(23, Calendar.JULY, 2011), new Date()));
         artistRepository.save(new Artist("Michał Lorenc", "Poland",
-                getDate(5, Calendar.OCTOBER, 1955), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(5, Calendar.OCTOBER, 1955), "", new Date()));
         artistRepository.save(new Artist("Frank Sinatra", "USA",
-                getDate(12, Calendar.DECEMBER, 1915), getDate(14, Calendar.MAY, 1998), new Date()));
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.DECEMBER, 1915), catalogMusicService.getStringDateWithoutTime(14, Calendar.MAY, 1998), new Date()));
         artistRepository.save(new Artist("Bryan Adams", "Canada",
-                getDate(12, Calendar.NOVEMBER, 1959), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.NOVEMBER, 1959), "", new Date()));
         artistRepository.save(new Artist("Sylwia Grzeszczak", "Poland",
-                getDate(7, Calendar.APRIL, 1989), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(7, Calendar.APRIL, 1989), "", new Date()));
     }
 
 
@@ -402,14 +405,6 @@ public class addSampleData implements CommandLineRunner {
         System.out.println("--------------------------------");
         userService.getAllRoles().forEach(System.out::println);
         System.out.println("--------------------------------");
-    }
-
-
-    public String getDate(int day, int month, int year)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
 
 

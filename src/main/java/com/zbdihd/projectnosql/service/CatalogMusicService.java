@@ -1,14 +1,29 @@
 package com.zbdihd.projectnosql.service;
 
 import com.zbdihd.projectnosql.model.Genre;
+import com.zbdihd.projectnosql.model.MusicLabel;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CatalogMusicService {
 
     List<Genre> getAllGenres();
-    void saveGenres(Genre genre);
+    void saveGenre(Genre genre);
     Genre findGenreByName(String genreName);
     void deleteGenreByName(String genreName);
     List<Genre> findByGenreNameStartsWithIgnoreCase(String genreName);
+
+    List<MusicLabel> getAllMusicLabels();
+    void saveMusicLabel(MusicLabel musicLabel);
+    MusicLabel findMusicLabelByName(String musicLabelName);
+    void deleteMusicLabelByName(String musicLabelName);
+    List<MusicLabel> findByMusicLabelNameStartsWithIgnoreCase(String musicLabelName);
+
+    List<String> getAllCountries();
+
+    //Date pattern "dd/MM/yyyy"
+    String getStringDateWithoutTime(int day, int month, int year);
+    LocalDate stringToDate(String dateWithoutTime);
+    String dateToString(LocalDate date);
 }

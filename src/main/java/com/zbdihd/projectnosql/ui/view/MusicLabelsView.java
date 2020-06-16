@@ -3,6 +3,8 @@ package com.zbdihd.projectnosql.ui.view;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,72 +18,99 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.*;
-import com.zbdihd.projectnosql.model.Genre;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.zbdihd.projectnosql.model.MusicLabel;
 import com.zbdihd.projectnosql.service.CatalogMusicService;
 import com.zbdihd.projectnosql.ui.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 
-@Route(value = "genres", layout = MainView.class)
-@PageTitle("Genres View")
-@CssImport("./styles/views/genres/genres-view.css")
-public class GenresView extends Div implements AfterNavigationObserver {
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Locale;
+
+@Route(value = "music-labels", layout = MainView.class)
+@PageTitle("Music Labels View")
+@CssImport("./styles/views/musicLabels/music-labels-view.css")
+public class MusicLabelsView extends Div implements AfterNavigationObserver {
 
     @Autowired
     private CatalogMusicService catalogMusicService;
 
-    private Grid<Genre> grid;
+    private Grid<MusicLabel> grid;
 
     //The name of the TextField variable must be the same as the variable corresponding to the field in the Genre class
     private TextField name = new TextField();
+
+    
+    private ComboBox<String> countryOfResidence = new ComboBox<>();
+    private TextField chairmanOfTheBoard = new TextField();
+    private DatePicker datePickerDateOfCreation = new DatePicker();
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
     private Button cancel = new Button("Cancel");
     private Button delete = new Button("Delete", VaadinIcon.TRASH.create());
 
-    private Binder<Genre> binder;
+    private Binder<MusicLabel> binder;
 
     //Text field to enter the username based on which the gird will be filtered
     private TextField filter = new TextField();
 
-    public GenresView() {
-        setId("genres-view");
+    public MusicLabelsView() {
+        setId("music-labels-view");
 
         // Configure Grid
-        grid = new Grid<>(Genre.class);
+        grid = new Grid<>(MusicLabel.class);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
 
-        grid.setColumns("id", "name");
-        grid.getColumnByKey("name").setHeader("Genre");
-        grid.addColumn(Genre::numberOfAlbums).setHeader("Number of Albums");
+        grid.setColumns("id", "name","countryOfResidence", "chairmanOfTheBoard", "dateOfCreation");
+        grid.getColumnByKey("name").setHeader("Music Label");
+
+        grid.getColumnByKey("countryOfResidence").setHeader("Country Of Residence");
+        grid.getColumnByKey("chairmanOfTheBoard").setHeader("Chairman Of The Board");
+        grid.getColumnByKey("dateOfCreation").setHeader("Date Of Creation");
 
         grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+        datePickerDateOfCreation.setLocale(Locale.UK);
+        datePickerDateOfCreation.setMax(LocalDate.now());
 
 
         //when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
 
         // Configure Form
-        binder = new Binder<>(Genre.class);
+        binder = new Binder<>(MusicLabel.class);
+
 
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
 
-        save.addClickListener(e -> {
-            Genre genre = grid.asSingleSelect().getValue();
 
-            if(genre == null){ //create new
-                catalogMusicService.saveGenre(new Genre(name.getValue(), new ArrayList<String>()));
-                Notification.show("Genre Added");
+
+        save.addClickListener(e -> {
+            MusicLabel musicLabel = grid.asSingleSelect().getValue();
+
+            if(musicLabel == null){ //create new
+                catalogMusicService.saveMusicLabel(new MusicLabel(name.getValue(),
+                                                    catalogMusicService.dateToString(datePickerDateOfCreation.getValue()),
+                                                    countryOfResidence.getValue(),
+                                                    chairmanOfTheBoard.getValue(),
+                                                    new Date()));
+                Notification.show("Music Label Added");
             }
             else {
-                genre.setName(name.getValue());
-                catalogMusicService.saveGenre(genre);
-                Notification.show("Genre Edited");
+                musicLabel.setName(name.getValue());
+                musicLabel.setDateOfCreation(catalogMusicService.dateToString(datePickerDateOfCreation.getValue()));
+                musicLabel.setCountryOfResidence(countryOfResidence.getValue());
+                musicLabel.setChairmanOfTheBoard(chairmanOfTheBoard.getValue());
+                musicLabel.setLastModifiedAt(new Date());
+                catalogMusicService.saveMusicLabel(musicLabel);
+                Notification.show("Music Label Edited");
             }
 
             refreshGrid();
@@ -92,10 +121,10 @@ public class GenresView extends Div implements AfterNavigationObserver {
         cancel.addClickListener(e -> grid.asSingleSelect().clear());
 
         delete.addClickListener(e -> {
-            Genre genre = catalogMusicService.findGenreByName(name.getValue());
-            if(genre != null) {
-                catalogMusicService.deleteGenreByName(genre.getName());
-                Notification.show("Genre Deleted");
+            MusicLabel musicLabel = catalogMusicService.findMusicLabelByName(name.getValue());
+            if(musicLabel != null) {
+                catalogMusicService.deleteMusicLabelByName(musicLabel.getName());
+                Notification.show("Music Label Deleted");
             }
 
             refreshGrid();
@@ -104,9 +133,9 @@ public class GenresView extends Div implements AfterNavigationObserver {
         //filter
         HorizontalLayout actions = new HorizontalLayout(filter);
         actions.setPadding(true);
-        filter.setPlaceholder("Filter by genre name");
+        filter.setPlaceholder("Filter by music label");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> listGenres(e.getValue()));
+        filter.addValueChangeListener(e -> listMusicLabels(e.getValue()));
 
 
         SplitLayout splitLayout = new SplitLayout();
@@ -136,7 +165,11 @@ public class GenresView extends Div implements AfterNavigationObserver {
         editorDiv.setId("editor-layout");
         FormLayout formLayout = new FormLayout();
 
-        addFormItem(editorDiv, formLayout, name, "Genre name");
+        addFormItem(editorDiv, formLayout, name, "Music Label name");
+        addFormItem(editorDiv, formLayout, countryOfResidence, "Country Of Residence");
+        addFormItem(editorDiv, formLayout, chairmanOfTheBoard, "Chairman Of The Board");
+        addFormItem(editorDiv, formLayout, datePickerDateOfCreation, "Date Of Creation");
+
 
         createButtonLayout(editorDiv);
         splitLayout.addToSecondary(editorDiv);
@@ -169,19 +202,31 @@ public class GenresView extends Div implements AfterNavigationObserver {
     }
 
     public void refreshGrid(){
-        grid.setItems(catalogMusicService.getAllGenres());
+        grid.setItems(catalogMusicService.getAllMusicLabels());
     }
 
-    private void populateForm(Genre value) {
+    private void populateForm(MusicLabel value) {
         // Value can be null as well, that clears the form
+        countryOfResidence.setItems(catalogMusicService.getAllCountries());
+        datePickerDateOfCreation.clear();
         binder.readBean(value);
+
+        try {
+            datePickerDateOfCreation.setValue(catalogMusicService.stringToDate(value.getDateOfCreation()));
+        }
+        catch (NullPointerException ex){
+            //ex.printStackTrace();
+        }
+
     }
 
-    void listGenres(String filterText) {
+
+
+    void listMusicLabels(String filterText) {
         if (StringUtils.isEmpty(filterText)) {
             refreshGrid();
         } else {
-            grid.setItems(catalogMusicService.findByGenreNameStartsWithIgnoreCase(filterText));
+            grid.setItems(catalogMusicService.findByMusicLabelNameStartsWithIgnoreCase(filterText));
         }
     }
 
