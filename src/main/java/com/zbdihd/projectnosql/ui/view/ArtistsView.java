@@ -247,7 +247,7 @@ public class ArtistsView extends Div implements AfterNavigationObserver {
         if (StringUtils.isEmpty(filterText)) {
             refreshGrid();
         } else {
-            grid.setItems(catalogMusicService.findByArtistNameStartsWithIgnoreCase(filterText));
+            grid.setItems(catalogMusicService.findCustomByRegExName(filterText));
         }
     }
 

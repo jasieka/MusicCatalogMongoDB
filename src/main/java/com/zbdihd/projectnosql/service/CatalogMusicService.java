@@ -26,6 +26,7 @@ public interface CatalogMusicService {
     Artist findArtistByName(String artistName);
     void deleteArtistByName(String artistName);
     List<Artist> findByArtistNameStartsWithIgnoreCase(String artistName);
+    List<Artist> findCustomByRegExName(String artistName);
 
 
     List<String> getAllCountries();

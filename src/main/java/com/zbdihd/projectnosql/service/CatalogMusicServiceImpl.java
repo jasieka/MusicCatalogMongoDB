@@ -88,6 +88,10 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
         return artistRepository.findByNameStartsWithIgnoreCase(artistName);
     }
 
+    public List<Artist> findCustomByRegExName(String artistName){
+        return artistRepository.findCustomByRegExName(artistName);
+    }
+
 
 
     public List<String> getAllCountries()
