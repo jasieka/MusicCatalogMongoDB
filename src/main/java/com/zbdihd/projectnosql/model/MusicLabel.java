@@ -1,7 +1,6 @@
 package com.zbdihd.projectnosql.model;
 
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,12 +11,21 @@ import java.util.Date;
 @Document(collection = "MusicLabel")
 public class MusicLabel {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name;
-    @NonNull public String dateOfCreation; //format dd/MM/yyyy
-    @NonNull public String countryOfResidence;
-    @NonNull public String chairmanOfTheBoard; //prezes zarządu
+    private String name;
+    private String dateOfCreation; //format dd/MM/yyyy
+    private String countryOfResidence;
+    private String chairmanOfTheBoard; //prezes zarządu
 
-    @NonNull public Date lastModifiedAt; //or created
+    private Date lastModifiedAt; //or created
+
+
+    public MusicLabel(String name, String dateOfCreation, String countryOfResidence, String chairmanOfTheBoard, Date lastModifiedAt) {
+        this.name = name;
+        this.dateOfCreation = dateOfCreation;
+        this.countryOfResidence = countryOfResidence;
+        this.chairmanOfTheBoard = chairmanOfTheBoard;
+        this.lastModifiedAt = lastModifiedAt;
+    }
 }

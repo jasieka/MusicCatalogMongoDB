@@ -1,8 +1,8 @@
 package com.zbdihd.projectnosql.model;
 
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -11,8 +11,19 @@ import java.util.List;
 @Document(collection = "Genre")
 public class Genre {
     @Id
-    public String id;
+    private String id;
 
-    @NonNull public String name;
-    @NonNull public List<String> albumIDs;
+    private String name;
+    @DBRef
+    private List<Album> albumList;
+
+    public int numberOfAlbums() {
+        return albumList.size();
+    }
+
+
+    public Genre(String name, List<Album> albumList) {
+        this.name = name;
+        this.albumList = albumList;
+    }
 }

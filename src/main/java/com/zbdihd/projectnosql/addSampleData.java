@@ -1,19 +1,14 @@
 package com.zbdihd.projectnosql;
 
 
-import com.zbdihd.projectnosql.model.Album;
-import com.zbdihd.projectnosql.model.Artist;
-import com.zbdihd.projectnosql.model.Genre;
-import com.zbdihd.projectnosql.model.MusicLabel;
-import com.zbdihd.projectnosql.repository.AlbumRepository;
-import com.zbdihd.projectnosql.repository.ArtistRepository;
-import com.zbdihd.projectnosql.repository.GenreRepository;
-import com.zbdihd.projectnosql.repository.MusicLabelRepository;
+import com.zbdihd.projectnosql.model.*;
+import com.zbdihd.projectnosql.repository.*;
+import com.zbdihd.projectnosql.service.CatalogMusicService;
+import com.zbdihd.projectnosql.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -31,6 +26,12 @@ public class addSampleData implements CommandLineRunner {
     @Autowired
     private MusicLabelRepository musicLabelRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CatalogMusicService catalogMusicService;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -44,48 +45,62 @@ public class addSampleData implements CommandLineRunner {
         addMusicLabels();
         addArtists(); //Artist/Band
         addAlbums();
+        addUsers();
+    }
+
+    public void addUsers(){
+        userService.addRole("ADMIN");
+        userService.addRole("USER");
+
+        userService.addUser("user", "user", "user");
+        userService.addUser("admin", "admin", "admin");
+
+        //userService.addRoleToUser("user", "admin");
+
+        //userService.changeStatusEnabled(userService.getUser("admin"));
+
     }
 
 
     public void addGenres(){
-        genreRepository.save(new Genre("Jazz", new ArrayList<String>()));
-        genreRepository.save(new Genre("Classical", new ArrayList<String>()));
-        genreRepository.save(new Genre("Pop", new ArrayList<String>()));
-        genreRepository.save(new Genre("Rock", new ArrayList<String>()));
-        genreRepository.save(new Genre("Soundtracks", new ArrayList<String>()));
-        genreRepository.save(new Genre("Rap & Hip-Hop", new ArrayList<String>()));
+        genreRepository.save(new Genre("Jazz", new ArrayList<Album>()));
+        genreRepository.save(new Genre("Classical", new ArrayList<Album>()));
+        genreRepository.save(new Genre("Pop", new ArrayList<Album>()));
+        genreRepository.save(new Genre("Rock", new ArrayList<Album>()));
+        genreRepository.save(new Genre("Soundtracks", new ArrayList<Album>()));
+        genreRepository.save(new Genre("Rap & Hip-Hop", new ArrayList<Album>()));
     }
 
     public void addMusicLabels(){
-        musicLabelRepository.save(new MusicLabel("E-music", getDate(2, Calendar.FEBRUARY, 2014),
+        musicLabelRepository.save(new MusicLabel("E-music", catalogMusicService.getStringDateWithoutTime(2, Calendar.FEBRUARY, 2014),
                 "Poland", "Jacek Kowalczyk", new Date()));
-        musicLabelRepository.save(new MusicLabel("Ultra Records", getDate(28, Calendar.MAY, 2007),
-                "USA", "Patrick Moxey", new Date()));
-        musicLabelRepository.save(new MusicLabel("Warner Music Group", getDate(15, Calendar.JULY, 1958),
-                "USA", "Dannii Minogue", new Date()));
-        musicLabelRepository.save(new MusicLabel("K Records", getDate(25, Calendar.FEBRUARY, 1975),
+        musicLabelRepository.save(new MusicLabel("Ultra Records", catalogMusicService.getStringDateWithoutTime(28, Calendar.MAY, 2007),
+                "United States", "Patrick Moxey", new Date()));
+        musicLabelRepository.save(new MusicLabel("Warner Music Group", catalogMusicService.getStringDateWithoutTime(15, Calendar.JULY, 1958),
+                "United States", "Dannii Minogue", new Date()));
+        musicLabelRepository.save(new MusicLabel("K Records", catalogMusicService.getStringDateWithoutTime(25, Calendar.FEBRUARY, 1975),
                 "Canada", "Calvin Johnson", new Date()));
-        musicLabelRepository.save(new MusicLabel("Chronological Classics", getDate(10, Calendar.DECEMBER, 1989),
+        musicLabelRepository.save(new MusicLabel("Chronological Classics", catalogMusicService.getStringDateWithoutTime(10, Calendar.DECEMBER, 1989),
                 "France", "Gilles Pétard", new Date()));
-        musicLabelRepository.save(new MusicLabel("Sony Music", getDate(6, Calendar.MAY, 1990),
-                "USA", "Ton Bryan", new Date()));
+        musicLabelRepository.save(new MusicLabel("Sony Music", catalogMusicService.getStringDateWithoutTime(6, Calendar.MAY, 1990),
+                "United States", "Ton Bryan", new Date()));
     }
 
     public void addArtists(){
-        artistRepository.save(new Artist("Michael Jackson", "USA",
-                getDate(29, Calendar.AUGUST, 1958), getDate(25, Calendar.JUNE, 2009), new Date()));
+        artistRepository.save(new Artist("Michael Jackson", "United States",
+                catalogMusicService.getStringDateWithoutTime(29, Calendar.AUGUST, 1958), catalogMusicService.getStringDateWithoutTime(25, Calendar.JUNE, 2009), new Date()));
         artistRepository.save(new Artist("Hans Zimmer", "Germany",
-                getDate(12, Calendar.SEPTEMBER, 1957), "", new Date()));
-        artistRepository.save(new Artist("Amy Winehouse", "USA",
-                getDate(14, Calendar.SEPTEMBER, 1983), getDate(23, Calendar.JULY, 2011), new Date()));
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.SEPTEMBER, 1957), "", new Date()));
+        artistRepository.save(new Artist("Amy Winehouse", "United States",
+                catalogMusicService.getStringDateWithoutTime(14, Calendar.SEPTEMBER, 1983), catalogMusicService.getStringDateWithoutTime(23, Calendar.JULY, 2011), new Date()));
         artistRepository.save(new Artist("Michał Lorenc", "Poland",
-                getDate(5, Calendar.OCTOBER, 1955), "", new Date()));
-        artistRepository.save(new Artist("Frank Sinatra", "USA",
-                getDate(12, Calendar.DECEMBER, 1915), getDate(14, Calendar.MAY, 1998), new Date()));
+                catalogMusicService.getStringDateWithoutTime(5, Calendar.OCTOBER, 1955), "", new Date()));
+        artistRepository.save(new Artist("Frank Sinatra", "United States",
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.DECEMBER, 1915), catalogMusicService.getStringDateWithoutTime(14, Calendar.MAY, 1998), new Date()));
         artistRepository.save(new Artist("Bryan Adams", "Canada",
-                getDate(12, Calendar.NOVEMBER, 1959), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(12, Calendar.NOVEMBER, 1959), "", new Date()));
         artistRepository.save(new Artist("Sylwia Grzeszczak", "Poland",
-                getDate(7, Calendar.APRIL, 1989), "", new Date()));
+                catalogMusicService.getStringDateWithoutTime(7, Calendar.APRIL, 1989), "", new Date()));
     }
 
 
@@ -109,12 +124,12 @@ public class addSampleData implements CommandLineRunner {
                 "S.T.A.Y.",
                 "Where We're Going");
         albumRepository.save(new Album("Interstellar",
-                artistRepository.findFirstByName("Hans Zimmer").getId(),
+                artistRepository.findFirstByName("Hans Zimmer"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/41VzuDJLCXL.jpg",
-                musicLabelRepository.findFirstByName("Sony Music").getId(),
+                musicLabelRepository.findFirstByName("Sony Music"),
                 2014,
                 1,
                 "Interstellar pairs the creative forces of Hans Zimmer and esteemed director Christopher Nolan, who collaborated previously on The Dark Knight film trilogy and Inception. Chris wanted us to push the limits, offers Zimmer. Every conversation was about pushing boundaries and exploring new territories. This movie virtually dictates that you put everything on the line and keep the laboratory doors wide open and experiment to the very end. It tested our limits: the limits of what musicians are capable of, the limits of what could be recorded, the limits of everyone's stamina, commitment and invention, and I think we got it.\n" +
@@ -124,9 +139,9 @@ public class addSampleData implements CommandLineRunner {
         ));
         //Add album to genre
         Genre genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        List<String> genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
-        genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Interstellar").getId());
-        genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
+        List<Album> genreSoundtracksListOfAlbum = genreSoundtracks.getAlbumList();
+        genreSoundtracksListOfAlbum.add(albumRepository.findFirstByName("Interstellar"));
+        genreSoundtracks.setAlbumList(genreSoundtracksListOfAlbum);
         genreRepository.save(genreSoundtracks);
 
         //
@@ -149,12 +164,12 @@ public class addSampleData implements CommandLineRunner {
                 "Inception Medley: Half Remembered Dream / Dream Is Collapsing / Mombasa / Time"
         );
         albumRepository.save(new Album("Live In Prague",
-                artistRepository.findFirstByName("Hans Zimmer").getId(),
+                artistRepository.findFirstByName("Hans Zimmer"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/81goB-mjoZL._SL1500_.jpg",
-                musicLabelRepository.findFirstByName("Ultra Records").getId(),
+                musicLabelRepository.findFirstByName("Ultra Records"),
                 2016,
                 2,
                 "Hans Zimmer is one of the most successful film music composers working today. His multi-award winning career reaches back to the mid-80s and he has developed close working relationships with renowned directors such as Ridley Scott, Michael Bay, Ron Howard and Christopher Nolan. This concert was filmed on May 7th, 2016 in Prague during his hugely successful European concert tour. Hans was accompanied by a band, orchestra and choir, 72 musicians in total, including Johnny Marr of The Smiths.",
@@ -162,9 +177,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
-        genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Live In Prague").getId());
-        genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
+        genreSoundtracksListOfAlbum = genreSoundtracks.getAlbumList();
+        genreSoundtracksListOfAlbum.add(albumRepository.findFirstByName("Live In Prague"));
+        genreSoundtracks.setAlbumList(genreSoundtracksListOfAlbum);
         genreRepository.save(genreSoundtracks);
 
         //
@@ -197,12 +212,12 @@ public class addSampleData implements CommandLineRunner {
                 "Kolysanka"
         );
         albumRepository.save(new Album("Psy & Osaczony",
-                artistRepository.findFirstByName("Michał Lorenc").getId(),
+                artistRepository.findFirstByName("Michał Lorenc"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/51%2BIkqQHp4L.jpg",
-                musicLabelRepository.findFirstByName("E-music").getId(),
+                musicLabelRepository.findFirstByName("E-music"),
                 2005,
                 2,
                 "",
@@ -210,9 +225,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genreSoundtracks = genreRepository.findFirstByName("Soundtracks");
-        genreSoundtracksListOfAlbumIDs = genreSoundtracks.albumIDs;
-        genreSoundtracksListOfAlbumIDs.add(albumRepository.findFirstByName("Psy & Osaczony").getId());
-        genreSoundtracks.setAlbumIDs(genreSoundtracksListOfAlbumIDs);
+        genreSoundtracksListOfAlbum = genreSoundtracks.getAlbumList();
+        genreSoundtracksListOfAlbum.add(albumRepository.findFirstByName("Psy & Osaczony"));
+        genreSoundtracks.setAlbumList(genreSoundtracksListOfAlbum);
         genreRepository.save(genreSoundtracks);
 
         //
@@ -234,12 +249,12 @@ public class addSampleData implements CommandLineRunner {
                                 "Kiedy tylko spojrzę"
         );
         albumRepository.save(new Album("Komponujac Siebie",
-                artistRepository.findFirstByName("Sylwia Grzeszczak").getId(),
+                artistRepository.findFirstByName("Sylwia Grzeszczak"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/61rVfWLoBxL.jpg",
-                musicLabelRepository.findFirstByName("E-music").getId(),
+                musicLabelRepository.findFirstByName("E-music"),
                 2013,
                 1,
                 "Sylwia Grzeszczak singer, composer, songwriter ... in a word, a man orchestra ... she got to know a wider audience through cooperation with Liber and an amazing duo - a combination of youthful strength and experience, beautiful singing and playing the piano with electrifying rap, which next year in a row conquers the hearts of fans across Poland.\n" +
@@ -251,9 +266,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         Genre genrePop = genreRepository.findFirstByName("Pop");
-        List<String> genrePopListOfAlbumIDs = genrePop.albumIDs;
-        genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Komponujac Siebie").getId());
-        genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
+        List<Album> genrePopListOfAlbum = genrePop.getAlbumList();
+        genrePopListOfAlbum.add(albumRepository.findFirstByName("Komponujac Siebie"));
+        genreSoundtracks.setAlbumList(genrePopListOfAlbum);
         genreRepository.save(genrePop);
 
 
@@ -274,12 +289,12 @@ public class addSampleData implements CommandLineRunner {
                                 "Leave Me Alone"
         );
         albumRepository.save(new Album("Bad",
-                artistRepository.findFirstByName("Michael Jackson").getId(),
+                artistRepository.findFirstByName("Michael Jackson"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/71xG%2BqsDb%2BL._SX522_.jpg",
-                musicLabelRepository.findFirstByName("K Records").getId(),
+                musicLabelRepository.findFirstByName("K Records"),
                 1987,
                 1,
                 "Bad is Michael Jackson's 7th studio album, released by K Records on August 31, 1987.This album consists of 11 of Jackson's songs, one that features Stevie Wonder and another that features Siedah Garrett. Bad is the 19-27th most sold album worldwide with 65,000,000 sold.",
@@ -287,9 +302,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genrePop = genreRepository.findFirstByName("Pop");
-        genrePopListOfAlbumIDs = genrePop.albumIDs;
-        genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Bad").getId());
-        genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
+        genrePopListOfAlbum = genrePop.getAlbumList();
+        genrePopListOfAlbum.add(albumRepository.findFirstByName("Bad"));
+        genreSoundtracks.setAlbumList(genrePopListOfAlbum);
         genreRepository.save(genrePop);
 
         //
@@ -307,12 +322,12 @@ public class addSampleData implements CommandLineRunner {
                                 "The Lady in My Life"
         );
         albumRepository.save(new Album("Thriller",
-                artistRepository.findFirstByName("Michael Jackson").getId(),
+                artistRepository.findFirstByName("Michael Jackson"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/71Y24VlCZGL._SX522_.jpg",
-                musicLabelRepository.findFirstByName("K Records").getId(),
+                musicLabelRepository.findFirstByName("K Records"),
                 1982,
                 1,
                 "Thriller is the sixth studio album by American singer Michael Jackson, released on November 30, 1982 by K Records. Reunited with Off the Wall producer Quincy Jones, Jackson was inspired to create an album where \"every song was a killer\". With the ongoing backlash against disco, Jackson moved in a new musical direction, incorporating pop, rock, R&B, post-disco, and funk. The album features a single guest appearance, with Paul McCartney becoming the first artist to be featured on Jackson's albums. Recording took place from April to November 1982 at Westlake Recording Studios in Los Angeles, with a production budget of $750,000.",
@@ -320,9 +335,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         genrePop = genreRepository.findFirstByName("Pop");
-        genrePopListOfAlbumIDs = genrePop.albumIDs;
-        genrePopListOfAlbumIDs.add(albumRepository.findFirstByName("Thriller").getId());
-        genreSoundtracks.setAlbumIDs(genrePopListOfAlbumIDs);
+        genrePopListOfAlbum = genrePop.getAlbumList();
+        genrePopListOfAlbum.add(albumRepository.findFirstByName("Thriller"));
+        genreSoundtracks.setAlbumList(genrePopListOfAlbum);
         genreRepository.save(genrePop);
 
         //
@@ -355,12 +370,12 @@ public class addSampleData implements CommandLineRunner {
                                 "Theme from New York, New York"
         );
         albumRepository.save(new Album("Best Of The Best",
-                artistRepository.findFirstByName("Frank Sinatra").getId(),
+                artistRepository.findFirstByName("Frank Sinatra"),
                 tracks,
-                new HashMap<String, String>(),
+                new HashMap<String, Integer>(),
                 0,
                 "https://images-na.ssl-images-amazon.com/images/I/41t3vCjOH1L.jpg",
-                musicLabelRepository.findFirstByName("Sony Music").getId(),
+                musicLabelRepository.findFirstByName("Sony Music"),
                 2011,
                 1,
                 "The album was promoted as having his classic hits from Sony Music together on one record for the first time ever. This 2 disc set is packaged in a lift top box and contains 5 collectible postcards of classic Sinatra images. The first disc contains the biggest hits from Frank Sinatra's career; the second disc contains the long out-of-print Live In '57 performance recorded in Seattle, Washington. Though this album was compiled and released by Sony Music, the song \"Night and Day\" presented here is not the Capitol version, but the 1962 Reprise version from the album Sinatra and Strings.",
@@ -368,9 +383,9 @@ public class addSampleData implements CommandLineRunner {
 
         //Add album to genre
         Genre genreJazz = genreRepository.findFirstByName("Jazz");
-        List<String> genreJazzListOfAlbumIDs = genreJazz.albumIDs;
-        genreJazzListOfAlbumIDs.add(albumRepository.findFirstByName("Best Of The Best").getId());
-        genreJazz.setAlbumIDs(genreJazzListOfAlbumIDs);
+        List<Album> genreJazzListOfAlbum = genreJazz.getAlbumList();
+        genreJazzListOfAlbum.add(albumRepository.findFirstByName("Best Of The Best"));
+        genreJazz.setAlbumList(genreJazzListOfAlbum);
         genreRepository.save(genreJazz);
     }
 
@@ -386,14 +401,10 @@ public class addSampleData implements CommandLineRunner {
         System.out.println("--------------------------------");
         albumRepository.findAll().forEach(System.out::println);
         System.out.println("--------------------------------");
-    }
-
-
-    public String getDate(int day, int month, int year)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+        userService.getAllUsers().forEach(System.out::println);
+        System.out.println("--------------------------------");
+        userService.getAllRoles().forEach(System.out::println);
+        System.out.println("--------------------------------");
     }
 
 
@@ -403,6 +414,7 @@ public class addSampleData implements CommandLineRunner {
         artistRepository.deleteAll();
         genreRepository.deleteAll();
         musicLabelRepository.deleteAll();
+        userService.deleteAllUsersAndRoles();
     }
 
 
