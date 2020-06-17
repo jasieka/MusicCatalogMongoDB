@@ -33,10 +33,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @Route(value = "albums", layout = MainView.class)
@@ -93,9 +90,13 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         grid.getColumnByKey("releaseYear").setWidth("50px");
         grid.getColumnByKey("numberOfCDs").setWidth("50px");
 
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
         releaseYear.setHasControls(true);
         releaseYear.setMin(1900);
-        releaseYear.setMax(2100);
+        releaseYear.setMax(calendar.get(Calendar.YEAR));
 
         numberOfCDs.setHasControls(true);
         numberOfCDs.setMin(1);
