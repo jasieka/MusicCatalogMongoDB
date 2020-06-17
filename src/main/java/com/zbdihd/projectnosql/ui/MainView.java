@@ -15,11 +15,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
-import com.zbdihd.projectnosql.ui.view.ArtistsView;
-import com.zbdihd.projectnosql.ui.view.GenresView;
-import com.zbdihd.projectnosql.ui.view.MusicLabelsView;
+import com.zbdihd.projectnosql.ui.view.*;
 import com.zbdihd.projectnosql.ui.view.users.UsersView;
-import com.zbdihd.projectnosql.ui.view.HelloGui;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +39,7 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         addMenuTab("Genres", GenresView.class);
         addMenuTab("Music Labels", MusicLabelsView.class);
         addMenuTab("Artists", ArtistsView.class);
+        addMenuTab("Albums", AlbumsView.class);
         addMenuTab("Hello World", HelloGui.class);
 
         SecurityContext context = SecurityContextHolder.getContext();

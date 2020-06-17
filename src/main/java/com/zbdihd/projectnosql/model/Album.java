@@ -1,10 +1,11 @@
 package com.zbdihd.projectnosql.model;
 
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,18 +16,53 @@ public class Album {
     @Id
     private String id;
 
-    @NonNull private String name;
-    @NonNull private String artistId;
-    @NonNull private List<String> tracks;
+    private String name;
+    @DBRef
+    private Artist artist;
+    private List<String> tracks;
 
-    @NonNull private Map<String, String> ratings; // "userName;rating"
-    @NonNull private int averageRating; //calculated after each operation on ratings
+    private Map<String, Integer> ratings; // "userName;rating"
+    private double averageRating; //calculated after each operation on ratings
 
-    @NonNull private String imageURL;
-    @NonNull private String musicLabelId;
-    @NonNull private int releaseYear;
-    @NonNull private int numberOfCDs;
-    @NonNull private String description;
+    private String imageURL;
 
-    @NonNull private Date lastModifiedAt; //or created
+    @DBRef
+    private MusicLabel musicLabel;
+    private int releaseYear;
+    private int numberOfCDs;
+    private String description;
+
+    private Date lastModifiedAt; //or created
+
+
+    public Album(String name, Artist artist, List<String> tracks, Map<String, Integer> ratings, double averageRating, String imageURL, MusicLabel musicLabel, int releaseYear, int numberOfCDs, String description, Date lastModifiedAt) {
+        this.name = name;
+        this.artist = artist;
+        this.tracks = tracks;
+        this.ratings = ratings;
+        this.averageRating = averageRating;
+        this.imageURL = imageURL;
+        this.musicLabel = musicLabel;
+        this.releaseYear = releaseYear;
+        this.numberOfCDs = numberOfCDs;
+        this.description = description;
+        this.lastModifiedAt = lastModifiedAt;
+    }
+
+    public String getArtistName(){
+        if(artist == null)
+            return "";
+        return artist.getName();
+    }
+
+    public String getMusicLabelName(){
+        if(musicLabel == null)
+            return "";
+        return musicLabel.getName();
+    }
+
+    public void refreshAverageRating(){
+        if(ratings.size() > 0)
+            averageRating = ratings.values().stream().mapToInt(i -> i).average().orElse(0);
+    }
 }

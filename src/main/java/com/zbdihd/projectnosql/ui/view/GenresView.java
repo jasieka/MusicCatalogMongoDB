@@ -17,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
+import com.zbdihd.projectnosql.model.Album;
 import com.zbdihd.projectnosql.model.Genre;
 import com.zbdihd.projectnosql.service.CatalogMusicService;
 import com.zbdihd.projectnosql.ui.MainView;
@@ -75,7 +76,7 @@ public class GenresView extends Div implements AfterNavigationObserver {
             Genre genre = grid.asSingleSelect().getValue();
 
             if(genre == null){ //create new
-                catalogMusicService.saveGenre(new Genre(name.getValue(), new ArrayList<String>()));
+                catalogMusicService.saveGenre(new Genre(name.getValue(), new ArrayList<Album>()));
                 Notification.show("Genre Added");
             }
             else {

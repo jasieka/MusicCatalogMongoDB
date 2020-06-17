@@ -119,6 +119,7 @@ public class MusicLabelsView extends Div implements AfterNavigationObserver {
         delete.addClickListener(e -> {
             MusicLabel musicLabel = catalogMusicService.findMusicLabelByName(name.getValue());
             if(musicLabel != null) {
+                catalogMusicService.removeMusicLabelsReferenceFromAlbums(musicLabel);
                 catalogMusicService.deleteMusicLabelByName(musicLabel.getName());
                 Notification.show("Music Label Deleted");
             }

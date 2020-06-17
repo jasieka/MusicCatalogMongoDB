@@ -1,9 +1,11 @@
 package com.zbdihd.projectnosql.service;
 
 
+import com.zbdihd.projectnosql.model.Album;
 import com.zbdihd.projectnosql.model.Artist;
 import com.zbdihd.projectnosql.model.Genre;
 import com.zbdihd.projectnosql.model.MusicLabel;
+import com.zbdihd.projectnosql.repository.AlbumRepository;
 import com.zbdihd.projectnosql.repository.ArtistRepository;
 import com.zbdihd.projectnosql.repository.GenreRepository;
 import com.zbdihd.projectnosql.repository.MusicLabelRepository;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 public class CatalogMusicServiceImpl implements CatalogMusicService {
@@ -88,8 +87,69 @@ public class CatalogMusicServiceImpl implements CatalogMusicService {
         return artistRepository.findByNameStartsWithIgnoreCase(artistName);
     }
 
-    public List<Artist> findCustomByRegExName(String artistName){
+    public List<Artist> findCustomArtistByRegExName(String artistName){
         return artistRepository.findCustomByRegExName(artistName);
+    }
+
+
+    @Autowired
+    private AlbumRepository albumRepository;
+
+    public List<Album> getAllAlbums(){
+        return albumRepository.findAll();
+    }
+
+    public void saveAlbum(Album album){
+        albumRepository.save(album);
+    }
+
+    public Album findAlbumByName(String albumName) {
+        return albumRepository.findFirstByName(albumName);
+    }
+
+    public void deleteAlbumByName(String albumName){
+        albumRepository.deleteByName(albumName);
+    }
+
+    public List<Album> findByAlbumNameStartsWithIgnoreCase(String albumName){
+        return albumRepository.findByNameStartsWithIgnoreCase(albumName);
+    }
+
+    public List<Album> findCustomAlbumByRegExName(String albumName){
+        return albumRepository.findCustomByRegExName(albumName);
+    }
+
+
+
+
+
+
+    public void removeMusicLabelsReferenceFromAlbums(MusicLabel musicLabel) {
+        for(Album album : getAllAlbums())
+        {
+            if(album.getMusicLabel().equals(musicLabel))
+                album.setMusicLabel(null);
+        }
+    }
+
+
+    public void removeArtistReferenceFromAlbums(Artist artist) {
+        for(Album album : getAllAlbums())
+        {
+            if(album.getArtist().equals(artist))
+                album.setArtist(null);
+        }
+    }
+
+    public void removeAlbumReferenceFromGenre(Album album) {
+        for (Genre genre : getAllGenres()) {
+            List<Album> listOfAlbums = new ArrayList<>();
+            for (Album album1 : genre.getAlbumList()) {
+                if(!album1.equals(album))
+                    listOfAlbums.add(album1);
+            }
+            genre.setAlbumList(listOfAlbums);
+        }
     }
 
 

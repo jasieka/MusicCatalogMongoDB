@@ -62,7 +62,7 @@ public class ArtistsView extends Div implements AfterNavigationObserver {
     private TextField filter = new TextField();
 
     public ArtistsView() {
-        setId("music-labels-view");
+        setId("artists-view");
 
         // Configure Grid
         grid = new Grid<>(Artist.class);
@@ -133,6 +133,7 @@ public class ArtistsView extends Div implements AfterNavigationObserver {
         delete.addClickListener(e -> {
             Artist artist = catalogMusicService.findArtistByName(name.getValue());
             if(artist != null) {
+                catalogMusicService.removeArtistReferenceFromAlbums(artist);
                 catalogMusicService.deleteArtistByName(artist.getName());
                 Notification.show("Artist Deleted");
             }
@@ -247,7 +248,7 @@ public class ArtistsView extends Div implements AfterNavigationObserver {
         if (StringUtils.isEmpty(filterText)) {
             refreshGrid();
         } else {
-            grid.setItems(catalogMusicService.findCustomByRegExName(filterText));
+            grid.setItems(catalogMusicService.findCustomArtistByRegExName(filterText));
         }
     }
 
