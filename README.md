@@ -9,4 +9,4 @@ MongoDB_URI is a URI that can be get e.g. from the MongoDBCompass application
 Java 8 <br>
 Vaadin 14.21 <br>
 Spring Boot 2.3.0 <br>
-MongoDB <br>
+MongoDB 4.2.6 <br>
