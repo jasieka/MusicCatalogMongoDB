@@ -6,7 +6,7 @@ The MongoDB_URI environment variable must be set before starting.
 MongoDB_URI is a URI that can be get e.g. from the MongoDBCompass application
 
 ## Technology stack
-Java 8
-Vaadin 14.21
-Spring Boot 2.3.0.RELEASE
-MongoDB
+Java 8 <br>
+Vaadin 14.21 <br>
+Spring Boot 2.3.0 <br>
+MongoDB <br>
