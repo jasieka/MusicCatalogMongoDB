@@ -34,18 +34,21 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         Image img = new Image("https://i.ibb.co/L5B5hJn/465-removebg-preview.png", "Music Catalog Logo");
         img.setHeight("44px");
 
-        addMenuTab("Users", UsersView.class);
-        addMenuTab("Genres", GenresView.class);
+        String loggedUserRoles = getAuth().getAuthorities().toString();
+
+        if(loggedUserRoles.equals("[ADMIN]")){
+            addMenuTab("Users", UsersView.class);
+            addMenuTab("Genres", GenresView.class);
+        }
+
         addMenuTab("Music Labels", MusicLabelsView.class);
         addMenuTab("Artists", ArtistsView.class);
         addMenuTab("Albums", AlbumsView.class);
         //addMenuTab("Hello World", HelloGui.class);
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication auth = context.getAuthentication();
 
         Div b = new Div();
-        b.setText("Logged in as: " + auth.getName() + "\t");
+        b.setText("Logged in as: " + getAuth().getName() + "\t");
         Button btnSignOut = new Button("Sign Out", new Icon(VaadinIcon.SIGN_OUT));
 
         btnSignOut.addClickListener(buttonClickEvent -> {
@@ -61,6 +64,11 @@ public class MainView extends AppLayout implements BeforeEnterObserver {
         b.getStyle().set("padding", "15px");
 
         addToNavbar(img, tabs, b);
+    }
+
+    private Authentication getAuth(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        return context.getAuthentication();
     }
 
 
