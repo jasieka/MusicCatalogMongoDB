@@ -53,6 +53,7 @@ public class addSampleData implements CommandLineRunner {
         userService.addRole("USER");
 
         userService.addUser("user", "user", "user");
+        userService.addUser("user1", "user1", "user");
         userService.addUser("admin", "admin", "admin");
 
         //userService.addRoleToUser("user", "admin");

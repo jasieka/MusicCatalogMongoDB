@@ -34,7 +34,6 @@ import java.util.Set;
 
 
 @Route(value="users", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Users View")
 @CssImport("./styles/views/users/users-view.css")
 public class UsersView extends Div implements AfterNavigationObserver {
