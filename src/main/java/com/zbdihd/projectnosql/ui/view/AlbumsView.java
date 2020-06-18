@@ -9,8 +9,10 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
@@ -57,9 +59,10 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
     private ComboBox<String> comboBoxArtist = new ComboBox<>();
     private ComboBox<String> comboBoxMusicLabel = new ComboBox<>();
 
-
     private NumberField averageRating = new NumberField();
     private IntegerField rating = new IntegerField();
+
+    private Image imgAlbumCover = new Image();
 
 
     private Button save = new Button("Save", VaadinIcon.CHECK.create());
@@ -110,6 +113,9 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         rating.setPlaceholder("0 - 10");
         rating.setMin(0);
         rating.setMax(10);
+
+        imgAlbumCover.setMaxHeight("200px");
+        imgAlbumCover.setMaxWidth("200px");
 
 
         //when a row is selected or deselected, populate form
@@ -222,6 +228,11 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         editorDiv.setId("editor-layout");
         FormLayout formLayout = new FormLayout();
 
+        VerticalLayout vLayout = new VerticalLayout();
+        vLayout.add(imgAlbumCover);
+        vLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, imgAlbumCover);
+        editorDiv.add(vLayout);
+
         addFormItem(editorDiv, formLayout, name, "Album name");
         addFormItem(editorDiv, formLayout, imageURL, "Image URL");
         addFormItem(editorDiv, formLayout, releaseYear, "Release Year");
@@ -231,7 +242,6 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         addFormItem(editorDiv, formLayout, comboBoxMusicLabel, "Music Label");
         addFormItem(editorDiv, formLayout, averageRating, "Average Rating");
         addFormItem(editorDiv, formLayout, rating, "Your rating");
-
 
         createButtonLayout(editorDiv);
         splitLayout.addToSecondary(editorDiv);
@@ -274,6 +284,10 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
 
         binder.readBean(value);
 
+        if(value.getImageURL() != null) {
+            imgAlbumCover.setSrc(value.getImageURL());
+            imgAlbumCover.setAlt("Image album cover");
+        }
 
         try {
             rating.setValue(value.getRatings().get(getLoggedUsername()));
