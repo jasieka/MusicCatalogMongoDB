@@ -282,10 +282,15 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
 
         binder.readBean(value);
 
-        if(value.getImageURL() != null) {
-            imgAlbumCover.setSrc(value.getImageURL());
-            imgAlbumCover.setAlt("Image album cover");
-        }
+
+        try {
+            if(value.getImageURL() != null) {
+                imgAlbumCover.setSrc(value.getImageURL());
+                imgAlbumCover.setAlt("Image album cover");
+            }
+        } catch (NullPointerException ignored){ }
+
+
 
         try {
             rating.setValue(value.getRatings().get(getLoggedUsername()));

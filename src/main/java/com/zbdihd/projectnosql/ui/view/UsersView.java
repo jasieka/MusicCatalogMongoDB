@@ -204,28 +204,21 @@ public class UsersView extends Div implements AfterNavigationObserver {
     private void populateForm(User value) {
         // Value can be null as well, that clears the form
 
-
-
         binder.readBean(value);
 
-
-        List<String> rolesInString = new ArrayList<>();
-        userService.getAllRoles().forEach(e -> rolesInString.add(e.getRole()));
-
-        selectRoles.setItems(rolesInString);
-
-        List<Role> role = new ArrayList<>(value.getRoles());
-        selectRoles.setValue(role.get(0).getRole());
-        password.setValue("");
-
-        /*
         try {
-            datePickerBirthDate.setValue(catalogMusicService.stringToDate(value.getBirthDate()));
-            datePickerDateOfDeath.setValue(catalogMusicService.stringToDate(value.getDateOfDeath()));
-        }
-        catch (NullPointerException ex){
-            //ex.printStackTrace();
-        }*/
+            List<String> rolesInString = new ArrayList<>();
+            userService.getAllRoles().forEach(e -> rolesInString.add(e.getRole()));
+
+            selectRoles.setItems(rolesInString);
+        } catch (NullPointerException ignored){ }
+
+        try {
+            List<Role> role = new ArrayList<>(value.getRoles());
+            selectRoles.setValue(role.get(0).getRole());
+        } catch (NullPointerException ignored){ }
+        
+        password.setValue("");
 
     }
 
