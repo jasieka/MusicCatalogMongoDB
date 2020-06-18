@@ -13,7 +13,10 @@ public interface UserService {
     List<Role> getAllRoles();
 
     void addUser(String username, String password, String role); //with save
-    User getUser(String username);
+    void saveUser(User user);
+    User findUserByUsername(String username);
+    List<User> findCustomByRegExUsername(String username);
+    void deleteUserByUsername(String username);
     List<User> getAllUsers();
     String getEncryptedPassword(String password);
     void changeStatusEnabled(User user); //with save

@@ -24,6 +24,16 @@ public class User {
     @DBRef
     private Set<Role> roles;
 
+    public User() {
+    }
+
+    public User(String username, String password, boolean enabled, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.roles = roles;
+    }
+
     public String setRolesToString() {
         List<String> list = new ArrayList<String>();
         roles.forEach(e -> list.add(e.getRole()));

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     public void addRoleToUser(String username, String role){
         Role r = roleRepository.findByRole(role.toUpperCase());
-        User u = getUser(username);
+        User u = findUserByUsername(username);
         u.getRoles().add(r);
         userRepository.save(u);
     }
@@ -57,13 +57,26 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public User getUser(String username){
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public User findUserByUsername(String username){
         return userRepository.findByUsername(username);
+    }
+
+    public List<User> findCustomByRegExUsername(String username){
+        return userRepository.findCustomByRegExUsername(username);
+    }
+
+    public void deleteUserByUsername(String username){
+        userRepository.deleteByUsername(username);
     }
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+
 
     public String getEncryptedPassword(String password){
         return bCryptPasswordEncoder.encode(password);

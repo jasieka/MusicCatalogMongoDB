@@ -192,7 +192,7 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         actions.setPadding(true);
         filter.setPlaceholder("Filter by album");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> listArtist(e.getValue()));
+        filter.addValueChangeListener(e -> listAlbums(e.getValue()));
 
 
         SplitLayout splitLayout = new SplitLayout();
@@ -307,7 +307,7 @@ public class AlbumsView extends Div implements AfterNavigationObserver {
         return auth.getName();
     }
 
-    void listArtist(String filterText) {
+    void listAlbums(String filterText) {
         if (StringUtils.isEmpty(filterText)) {
             refreshGrid();
         } else {
